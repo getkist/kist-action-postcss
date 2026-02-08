@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+type: software
+title: "@getkist/action-postcss"
+version: 1.0.0
+abstract: "PostCSS processing actions for kist"
+authors:
+  - name: "kist"
+repository-code: "https://github.com/getkist/kist-action-postcss"
+license: MIT
+keywords:
+  - kist
+  - postcss
+  - css
+  - autoprefixer
+  - cssnano
