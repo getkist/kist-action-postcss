@@ -59,7 +59,7 @@ Processes CSS files using PostCSS with autoprefixer and cssnano support.
 #### Options
 
 | Option | Type | Default | Description |
-|--------|------|---------|-------------|
+| -------- | ------ | --------- | ------------- |
 | `inputPath` | `string` | *required* | Path to the input CSS file |
 | `outputPath` | `string` | *required* | Path where the processed CSS will be saved |
 | `autoprefixer` | `boolean` | `true` | Enable autoprefixer |
