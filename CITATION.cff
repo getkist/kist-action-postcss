@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 type: software
 title: "@getkist/action-postcss"
-version: 1.0.22
+version: 1.0.23
 date-released: 2026-04-23
 abstract: "PostCSS processing actions for kist - A TypeScript-based build orchestration tool"
 authors:
