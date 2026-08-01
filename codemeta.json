@@ -5,7 +5,7 @@
   "description": "PostCSS processing actions for kist - A TypeScript-based build orchestration tool",
   "version": "1.0.23",
   "dateCreated": "2026-01-15",
-  "dateModified": "2026-02-08",
+  "dateModified": "2026-04-23",
   "license": "https://spdx.org/licenses/MIT",
   "codeRepository": "https://github.com/getkist/kist-action-postcss",
   "issueTracker": "https://github.com/getkist/kist-action-postcss/issues",
@@ -23,12 +23,12 @@
     {
       "@type": "SoftwareApplication",
       "name": "Node.js",
-      "version": "1.0.22"
+      "version": ">=22.0.0"
     },
     {
       "@type": "SoftwareApplication",
       "name": "kist",
-      "version": "1.0.22"
+      "version": ">=0.1.58"
     }
   ],
   "keywords": [
