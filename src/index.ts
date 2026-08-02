@@ -32,7 +32,7 @@ import { PostCssAction } from "./actions/PostCssAction/index.js";
  * in lockstep with the `version` field in `package.json`.
  */
 const plugin: ActionPlugin = {
-    version: "1.0.0",
+    version: "1.0.24",
     description: "PostCSS processing for kist",
     author: "kist",
     repository: "https://github.com/getkist/kist-action-postcss",
