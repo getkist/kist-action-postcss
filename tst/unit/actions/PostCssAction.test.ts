@@ -106,6 +106,22 @@ describe("PostCssAction", () => {
             expect(result).toBe(false);
         });
 
+        it("should fail with an actionable message for an uninstalled preset", async () => {
+            // Only cssnano-preset-default ships with cssnano. Asking for one
+            // of the others used to fail deep inside cssnano with a bare
+            // "Cannot load preset" and no hint that a package was missing.
+            const action = new PostCssAction();
+
+            await expect(
+                action.execute({
+                    inputPath: "any.css",
+                    outputPath: "out.css",
+                    minify: true,
+                    cssnanoPreset: "advanced",
+                }),
+            ).rejects.toThrow(/requires the "cssnano-preset-advanced" package/);
+        });
+
         it("should return true for valid cssnanoPreset", () => {
             const result = action.validateOptions({
                 inputPath: inputFile,

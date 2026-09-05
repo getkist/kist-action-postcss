@@ -3,6 +3,7 @@
 // ============================================================================
 
 import { promises as fs } from "fs";
+import { createRequire } from "module";
 import path from "path";
 import postcss, { AcceptedPlugin } from "postcss";
 import autoprefixer from "autoprefixer";
@@ -46,7 +47,16 @@ export interface PostCssActionOptions extends ActionOptionsType {
     browsers?: string[];
     /** Enable minification with cssnano; increases processing time but reduces output size (default: false) */
     minify?: boolean;
-    /** cssnano optimization preset controlling how aggressive minification is: `"default"`, `"lite"` (faster, fewer transforms), or `"advanced"` (more aggressive, may alter behavior in edge cases) (default: "default") */
+    /**
+     * cssnano optimization preset controlling how aggressive minification
+     * is: `"default"`, `"lite"` (faster, fewer transforms), or `"advanced"`
+     * (more aggressive, may alter behavior in edge cases) (default:
+     * "default").
+     *
+     * Only `"default"` ships with cssnano. `"lite"` and `"advanced"` live in
+     * separate packages — install `cssnano-preset-lite` or
+     * `cssnano-preset-advanced` alongside this action to use them.
+     */
     cssnanoPreset?: "default" | "lite" | "advanced";
     /** Generate a sourcemap for the output CSS (default: false) */
     sourcemap?: boolean;
@@ -146,6 +156,14 @@ export class PostCssAction extends Action<PostCssActionOptions> {
             plugins: customPlugins = [],
         } = options;
 
+        // Checked before any I/O: only the default preset ships inside
+        // cssnano, and asking for one of the others without its package
+        // produced cssnano's bare "Cannot load preset" from deep inside the
+        // build, with nothing to act on.
+        if (minify) {
+            this.assertPresetAvailable(cssnanoPreset);
+        }
+
         this.logInfo(`Processing CSS: ${inputPath} → ${outputPath}`);
 
         try {
@@ -203,6 +221,31 @@ export class PostCssAction extends Action<PostCssActionOptions> {
         } catch (error) {
             this.logError("PostCSS processing failed.", error);
             throw error;
+        }
+    }
+
+    /**
+     * Confirms the requested cssnano preset can actually be loaded.
+     *
+     * cssnano bundles only `cssnano-preset-default`; the other two are
+     * separate packages. Without this check, asking for one of them failed
+     * inside cssnano with "Cannot load preset" and no indication that a
+     * package was missing or which one.
+     *
+     * @param preset - The configured preset name.
+     * @throws {Error} If the preset's package is not installed.
+     */
+    private assertPresetAvailable(preset: string): void {
+        if (preset === "default") return;
+
+        const packageName = `cssnano-preset-${preset}`;
+        try {
+            createRequire(import.meta.url).resolve(packageName);
+        } catch {
+            throw new Error(
+                `cssnanoPreset "${preset}" requires the "${packageName}" package, ` +
+                    `which is not installed. Install it, or use the "default" preset.`,
+            );
         }
     }
 
